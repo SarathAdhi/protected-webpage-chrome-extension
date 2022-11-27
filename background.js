@@ -11,7 +11,9 @@ chrome.tabs.onUpdated.addListener(function () {
 
     console.log({ preUrls });
 
-    const isUrlExist = preUrls.some((preUrl) => url.includes(preUrl));
+    const isUrlExist = preUrls.some(
+      (preUrl) => url.includes(preUrl.link) && preUrl.check
+    );
 
     if (isUrlExist) {
       console.log("blocked");
@@ -23,7 +25,11 @@ chrome.tabs.onUpdated.addListener(function () {
     } else {
       console.log("not blocked");
     }
+
+    return true;
   });
+
+  return true;
 });
 
 // chrome.tabs.executeScript({

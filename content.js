@@ -11,12 +11,14 @@ async function sha256(message) {
 
   return hashHex;
 }
+const div = document.createElement("div");
+div.className = "entension_container";
 
 (() => {
+  const pageInnerHtml = document.body.innerHTML;
+
   chrome.runtime.onMessage.addListener(async (obj, sender, response) => {
     if (obj.name === "block") {
-      const pageInnerHtml = document.body.innerHTML;
-
       document.body.innerHTML = "";
 
       const link = document.createElement("link");
@@ -26,12 +28,10 @@ async function sha256(message) {
       link.integrity =
         "sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65";
       link.crossOrigin = "anonymous";
-
-      const div = document.createElement("div");
-      div.className = "entension_container";
+      link.id = "bootstrap-css-chrome-extension-remove-1029384756";
 
       div.innerHTML = `
-      <div class="modal fade show" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" style="display: block;" aria-modal="true" role="dialog">
+      <div class="w-100 modal fade show bg-black mw-100 mh-100" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" style="display: block; --bs-bg-opacity: .60; backdrop-filter: blur(5px);" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -39,12 +39,14 @@ async function sha256(message) {
             </div>
             <div class="modal-body">
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-white p-3">
             </div>
           </div>
         </div>
       </div>
       `;
+
+      div.id = "bootstrap-css-chrome-extension-remove-1029384756";
 
       document.body.append(link, div);
 
@@ -52,9 +54,13 @@ async function sha256(message) {
       const modalFooter = document.querySelector(".modal-footer");
 
       let input = document.createElement("input");
-      input.type = "password";
+      input.type = "text";
       input.placeholder = "Enter password";
       input.className = "w-100 form-control";
+      input.name = "password-input-chrome-extension";
+      input.autocomplete = "off";
+      input.id = "password-input-chrome-extension";
+
       input.addEventListener("keyup", (e) => {
         if (e.key === "Enter") {
           button.click();
@@ -75,6 +81,14 @@ async function sha256(message) {
 
         if (isPasswordCorrect) {
           document.body.innerHTML = pageInnerHtml;
+          var remove_elements = document.querySelectorAll(
+            "#bootstrap-css-chrome-extension-remove-1029384756"
+          );
+
+          remove_elements.forEach((element) => {
+            element.remove();
+          });
+
           return;
         }
 
@@ -83,6 +97,8 @@ async function sha256(message) {
 
       modalBody.append(input);
       modalFooter.append(button);
+
+      input.focus();
       return;
     }
 
@@ -97,7 +113,7 @@ async function sha256(message) {
       console.log({ preUrls });
 
       if (!preUrls.includes(obj.url)) {
-        preUrls = [...preUrls, obj.url];
+        preUrls = [...preUrls, { link: obj.url, check: true }];
 
         chrome.storage.sync.set(
           { urls: JSON.stringify(preUrls) },
