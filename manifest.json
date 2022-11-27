@@ -1,0 +1,21 @@
+{
+  "name": "Protected Webpage",
+  "version": "1.0.0",
+  "description": "latest covid data of UK",
+  "manifest_version": 3,
+  "author": "Sarath",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "URL Shotcuts"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["activeTab", "tabs", "storage", "nativeMessaging"]
+}
