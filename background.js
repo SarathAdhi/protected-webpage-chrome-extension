@@ -31,7 +31,3 @@ chrome.tabs.onUpdated.addListener(function () {
 
   return true;
 });
-
-// chrome.tabs.executeScript({
-//   file: "content.js",
-// });
